@@ -1,0 +1,51 @@
+# Arquivos que não devem ir para o repositório
+
+# Resultado da compilação (gerado de novo a cada build)
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+[Ll]og/
+[Ll]ogs/
+publish/
+artifacts/
+
+# Configurações pessoais do Visual Studio
+.vs/
+*.user
+*.suo
+*.rsuser
+*.userosscache
+*.userprefs
+*.sln.docstates
+
+# Configurações pessoais do VS Code e do Rider
+.vscode/
+.idea/
+
+# Variáveis de ambiente e segredos locais
+.env
+
+# Resultados de testes
+TestResults/
+[Tt]est[Rr]esult*/
+*.trx
+coverage*.json
+coverage*.xml
+
+# Pacotes NuGet gerados localmente
+*.nupkg
+*.snupkg
+**/packages/
+
+# Logs e arquivos temporários
+*.log
+*.tmp
+*.swp
+*~
+
+# Arquivos criados pelo sistema operacional
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini

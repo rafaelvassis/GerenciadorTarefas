@@ -1,0 +1,114 @@
+@* Participantes da tarefa: caixas de seleção + cadastro rápido de um participante novo.
+   Usado nos formulários de criar e editar tarefa. *@
+@{
+    var participantes = (List<GerenciadorTarefas.Models.Participante>)ViewBag.Participantes;
+    var marcados = (HashSet<Guid>)ViewBag.ParticipantesMarcados;
+}
+
+<div class="form-group mb-3">
+    <label class="control-label">Participantes</label>
+
+    <div id="lista-participantes">
+        @foreach (var p in participantes)
+        {
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="participantesIds"
+                       value="@p.IdParticipante" id="participante_@p.IdParticipante"
+                       checked="@marcados.Contains(p.IdParticipante)" />
+                <label class="form-check-label" for="participante_@p.IdParticipante">@p.Nome</label>
+            </div>
+        }
+    </div>
+    <p id="sem-participantes" class="text-muted mb-0" hidden="@participantes.Any()">Nenhum participante cadastrado.</p>
+    <div class="form-text">Opcional: marque quem participa desta tarefa.</div>
+
+    @* Os campos abaixo não têm "name", então não são enviados junto com a tarefa *@
+    <div class="border rounded p-2 mt-2">
+        <div class="small fw-semibold mb-2">Participante ainda não cadastrado? Adicione aqui:</div>
+        <div class="row g-2">
+            <div class="col-sm-5">
+                <input id="novo-participante-nome" type="text" class="form-control form-control-sm" placeholder="Nome" maxlength="150" />
+            </div>
+            <div class="col-sm-5">
+                <input id="novo-participante-email" type="text" class="form-control form-control-sm" placeholder="E-mail" maxlength="255" autocomplete="email" />
+            </div>
+            <div class="col-sm-2">
+                <button type="button" id="btn-adicionar-participante" class="btn btn-sm btn-outline-dark w-100">Adicionar</button>
+            </div>
+        </div>
+        <div id="novo-participante-erro" class="text-danger small mt-1"></div>
+    </div>
+</div>
+
+<script>
+    (function () {
+        const botao = document.getElementById('btn-adicionar-participante');
+        const nome = document.getElementById('novo-participante-nome');
+        const email = document.getElementById('novo-participante-email');
+        const erro = document.getElementById('novo-participante-erro');
+        const lista = document.getElementById('lista-participantes');
+        const semParticipantes = document.getElementById('sem-participantes');
+
+        async function adicionar() {
+            erro.textContent = '';
+            botao.disabled = true;
+
+            const dados = new FormData();
+            dados.append('Nome', nome.value.trim());
+            dados.append('Email', email.value.trim());
+            const token = botao.closest('form').querySelector('input[name="__RequestVerificationToken"]').value;
+
+            try {
+                const resposta = await fetch('@Url.Action("CriarRapido", "Participantes")', {
+                    method: 'POST',
+                    body: dados,
+                    headers: { 'RequestVerificationToken': token }
+                });
+                const resultado = await resposta.json();
+
+                if (!resposta.ok) {
+                    erro.textContent = resultado.erro;
+                    return;
+                }
+
+                // Mostra o participante novo na lista, já marcado
+                const div = document.createElement('div');
+                div.className = 'form-check';
+                const caixa = document.createElement('input');
+                caixa.className = 'form-check-input';
+                caixa.type = 'checkbox';
+                caixa.name = 'participantesIds';
+                caixa.value = resultado.id;
+                caixa.id = 'participante_' + resultado.id;
+                caixa.checked = true;
+                const rotulo = document.createElement('label');
+                rotulo.className = 'form-check-label';
+                rotulo.htmlFor = caixa.id;
+                rotulo.textContent = resultado.nome;
+                div.append(caixa, rotulo);
+                lista.append(div);
+
+                semParticipantes.hidden = true;
+                nome.value = '';
+                email.value = '';
+                nome.focus();
+            } catch {
+                erro.textContent = 'Não foi possível adicionar o participante. Tente novamente.';
+            } finally {
+                botao.disabled = false;
+            }
+        }
+
+        botao.addEventListener('click', adicionar);
+
+        // Enter nesses campos adiciona o participante, em vez de salvar a tarefa
+        [nome, email].forEach(function (campo) {
+            campo.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    adicionar();
+                }
+            });
+        });
+    })();
+</script>

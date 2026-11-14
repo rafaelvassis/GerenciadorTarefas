@@ -1,0 +1,178 @@
+@{
+    ViewData["Title"] = "Sobre o projeto";
+}
+
+<article class="sobre">
+
+    <header class="sobre-header">
+        <span class="sobre-tag">Projeto de portfólio</span>
+        <h1>Sobre o projeto</h1>
+        <p class="sobre-lead">
+            O Gerenciador de Tarefas é uma aplicação web para organizar e acompanhar tarefas,
+            com título, descrição, data de vencimento, status, categoria e participantes.
+            Foi desenvolvido para praticar e demonstrar desenvolvimento full stack com C#,
+            ASP.NET Core MVC, Entity Framework Core e SQL Server.
+        </p>
+    </header>
+
+    <section>
+        <h2>Tecnologias</h2>
+        <ul class="tags">
+            <li>C#</li>
+            <li>ASP.NET Core MVC (.NET 10)</li>
+            <li>Entity Framework Core</li>
+            <li>SQL Server</li>
+            <li>SSMS</li>
+            <li>Bootstrap</li>
+            <li>Git e GitHub</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>Funcionalidades</h2>
+        <ul class="lista">
+            <li>Cadastrar, listar, visualizar, editar e excluir tarefas (CRUD completo).</li>
+            <li>Classificar cada tarefa em uma categoria e incluir quantos participantes quiser, ou nenhum.</li>
+            <li>Cadastrar um participante novo direto no formulário da tarefa, sem sair da página.</li>
+            <li>Filtrar a lista de tarefas por participante, categoria e status.</li>
+            <li>Cadastrar categorias e participantes, com nome de categoria e e-mail únicos.</li>
+            <li>Controlar o status da tarefa: pendente, em andamento ou concluída.</li>
+            <li>Banco de dados criado automaticamente na primeira execução, com dados iniciais.</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>Arquitetura</h2>
+        <p class="texto">
+            Aplicação web monolítica no padrão <b>MVC</b> (Model-View-Controller). Para manter o projeto
+            simples, não há camadas extras de serviço ou repositório: os controllers usam o
+            <code>AppDbContext</code> do Entity Framework diretamente.
+        </p>
+
+        <div class="fluxo" aria-label="Fluxo de uma requisição">
+            <div class="etapa">Navegador<small>requisição HTTP</small></div>
+            <span class="seta" aria-hidden="true">→</span>
+            <div class="etapa">Controller<small>valida e coordena</small></div>
+            <span class="seta" aria-hidden="true">→</span>
+            <div class="etapa">AppDbContext<small>Entity Framework Core</small></div>
+            <span class="seta" aria-hidden="true">→</span>
+            <div class="etapa">SQL Server<small>tabelas e constraints</small></div>
+        </div>
+        <p class="texto fluxo-retorno">
+            Na volta, o controller entrega os dados para uma <b>View Razor</b>, que monta a página HTML exibida no navegador.
+        </p>
+
+        <ul class="lista">
+            <li><b>Controllers:</b> recebem a requisição, validam os dados, leem e gravam pelo <code>AppDbContext</code> e escolhem a view.</li>
+            <li><b>Models:</b> entidades <code>Tarefa</code>, <code>Categoria</code> e <code>Participante</code>, com as validações dos formulários.</li>
+            <li><b>Views:</b> páginas Razor com Bootstrap. Um pequeno JavaScript cuida do cadastro rápido de participantes.</li>
+            <li><b>Data e Migrations:</b> o mapeamento das entidades para as tabelas e o versionamento do banco, aplicado automaticamente ao iniciar.</li>
+            <li><b>Regras de negócio em dois níveis:</b> validação na aplicação, com mensagens amigáveis, e constraints no banco, que garantem as regras mesmo fora dela.</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>Modelo relacional</h2>
+        <p class="texto">
+            O banco <code>GerenciadorTarefas</code> possui quatro tabelas. Cada tarefa pertence a uma
+            categoria (relação 1:N). Tarefas e participantes têm uma relação N:N: uma tarefa pode ter
+            vários participantes ou nenhum, e um participante pode estar em várias tarefas. Essa ligação
+            fica na tabela associativa <code>TarefasParticipantes</code>.
+        </p>
+
+        <div class="diagrama">
+            <div class="tabela">
+                <div class="tabela-nome">Categorias</div>
+                <div class="coluna"><span class="chave pk">PK</span><b>IdCategoria</b><small>UNIQUEIDENTIFIER</small></div>
+                <div class="coluna"><span class="chave uq">UQ</span>Nome<small>NVARCHAR(150)</small></div>
+            </div>
+
+            <div class="relacao" aria-label="Uma categoria para muitas tarefas">
+                <span>1</span><i></i><span>N</span>
+            </div>
+
+            <div class="tabela tabela-central">
+                <div class="tabela-nome">Tarefas</div>
+                <div class="coluna"><span class="chave pk">PK</span><b>IdTarefa</b><small>UNIQUEIDENTIFIER</small></div>
+                <div class="coluna"><span class="chave"></span>Titulo<small>NVARCHAR(200)</small></div>
+                <div class="coluna"><span class="chave"></span>Descricao<small>NVARCHAR(1000) NULL</small></div>
+                <div class="coluna"><span class="chave"></span>DataVencimento<small>DATETIME2</small></div>
+                <div class="coluna"><span class="chave ck">CK</span>Status<small>INT</small></div>
+                <div class="coluna"><span class="chave"></span>DataCriacao<small>DATETIME2</small></div>
+                <div class="coluna"><span class="chave fk">FK</span>FK_IdCategoria<small>UNIQUEIDENTIFIER</small></div>
+            </div>
+
+            <div class="relacao" aria-label="Uma tarefa para muitos vínculos">
+                <span>1</span><i></i><span>N</span>
+            </div>
+
+            <div class="tabela">
+                <div class="tabela-nome">TarefasParticipantes</div>
+                <div class="coluna"><span class="chave pk">PK</span>FK_IdTarefa<small>FK → Tarefas</small></div>
+                <div class="coluna"><span class="chave pk">PK</span>FK_IdParticipante<small>FK → Participantes</small></div>
+            </div>
+
+            <div class="relacao" aria-label="Muitos vínculos para um participante">
+                <span>N</span><i></i><span>1</span>
+            </div>
+
+            <div class="tabela">
+                <div class="tabela-nome">Participantes</div>
+                <div class="coluna"><span class="chave pk">PK</span><b>IdParticipante</b><small>UNIQUEIDENTIFIER</small></div>
+                <div class="coluna"><span class="chave"></span>Nome<small>NVARCHAR(150)</small></div>
+                <div class="coluna"><span class="chave uq">UQ</span>Email<small>VARCHAR(255)</small></div>
+            </div>
+        </div>
+
+        <div class="regras">
+            <div>
+                <h3>Status (enum em C#)</h3>
+                <table>
+                    <tr><td>0</td><td>Pendente</td></tr>
+                    <tr><td>1</td><td>EmAndamento</td></tr>
+                    <tr><td>2</td><td>Concluida</td></tr>
+                </table>
+                <p>A constraint <code>CK_Tarefas_Status</code> garante que só esses valores sejam gravados.</p>
+            </div>
+            <div>
+                <h3>Regras do banco</h3>
+                <ul class="lista">
+                    <li>Chaves primárias do tipo GUID, geradas com <code>NEWID()</code>.</li>
+                    <li><code>DataCriacao</code> preenchida pelo banco com <code>SYSDATETIME()</code>.</li>
+                    <li>E-mail de participante e nome de categoria são únicos.</li>
+                    <li>Não é possível excluir uma categoria que ainda tenha tarefas.</li>
+                    <li>Ao excluir uma tarefa ou um participante, os vínculos entre eles são apagados juntos (<code>ON DELETE CASCADE</code>).</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>Estrutura do código</h2>
+        <dl class="estrutura">
+            <dt>Models</dt><dd>Entidades <code>Tarefa</code>, <code>Categoria</code>, <code>Participante</code> e o enum <code>EStatus</code>.</dd>
+            <dt>Controllers</dt><dd>Recebem as requisições e coordenam as operações, como os cadastros em <code>TarefasController</code>, <code>CategoriasController</code> e <code>ParticipantesController</code>.</dd>
+            <dt>Views</dt><dd>Páginas Razor com Bootstrap.</dd>
+            <dt>Data</dt><dd><code>AppDbContext</code>, com o mapeamento das tabelas, relacionamentos, restrições e dados iniciais.</dd>
+            <dt>Migrations</dt><dd>Histórico do esquema gerado pelo Entity Framework.</dd>
+            <dt>database</dt><dd>Scripts SQL para o SSMS: criação do banco e das tabelas, dados de exemplo, consultas (JOIN, GROUP BY), views, stored procedures e índices.</dd>
+        </dl>
+    </section>
+
+    <section>
+        <h2>Como executar</h2>
+        <p class="texto">Pré-requisitos: <b>.NET 10 SDK</b> e <b>SQL Server LocalDB</b> (já vem com o Visual Studio).</p>
+        <pre><code>git clone &lt;url-do-repositório&gt;
+cd GerenciadorTarefas
+dotnet run</code></pre>
+        <p class="texto">
+            Depois, acesse <code>http://localhost:5062</code>. Na primeira execução o banco é criado
+            automaticamente, já com categorias e um usuário de exemplo.
+        </p>
+    </section>
+
+    <div class="sobre-acoes">
+        <a class="btn btn-dark px-4" asp-controller="Tarefas" asp-action="Index">Ver as tarefas</a>
+    </div>
+
+</article>

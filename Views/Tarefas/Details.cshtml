@@ -1,0 +1,79 @@
+﻿@model GerenciadorTarefas.Models.Tarefa
+
+@{
+    ViewData["Title"] = "Detalhes da Tarefa";
+}
+
+<h1>Detalhes da Tarefa</h1>
+
+<div>
+    <h4>Informações da Tarefa</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Titulo)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Titulo)
+        </dd>
+
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Descricao)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Descricao)
+        </dd>
+
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.DataVencimento)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.DataVencimento)
+        </dd>
+
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+        <dd class="col-sm-9">
+            @Model.Status.String()
+        </dd>
+
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.FK_IdCategoria)
+        </dt>
+        <dd class="col-sm-9">
+            @Model.Categoria?.Nome
+        </dd>
+
+        <dt class="col-sm-3">
+            Participantes
+        </dt>
+        <dd class="col-sm-9">
+            @if (Model.Participantes.Any())
+            {
+                <ul class="list-unstyled mb-0">
+                    @foreach (var p in Model.Participantes.OrderBy(p => p.Nome))
+                    {
+                        <li>@p.Nome <span class="text-muted">(@p.Email)</span></li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <span class="text-muted">Nenhum participante</span>
+            }
+        </dd>
+
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.DataCriacao)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.DataCriacao)
+        </dd>
+    </dl>
+</div>
+
+<div class="mt-4">
+    <a asp-action="Edit" asp-route-id="@Model?.IdTarefa" class="btn btn-warning">Editar</a>
+    <a asp-action="Index" class="btn btn-secondary">Voltar para a Lista</a>
+</div>

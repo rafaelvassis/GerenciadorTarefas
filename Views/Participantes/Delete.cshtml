@@ -1,0 +1,33 @@
+@model GerenciadorTarefas.Models.Participante
+
+@{
+    ViewData["Title"] = "Excluir Participante";
+}
+
+<h1>Excluir Participante</h1>
+
+<h3 class="text-danger">Tem certeza que deseja excluir este participante?</h3>
+
+<dl class="row mt-4">
+    <dt class="col-sm-3">Nome</dt>
+    <dd class="col-sm-9">@Model.Nome</dd>
+
+    <dt class="col-sm-3">E-mail</dt>
+    <dd class="col-sm-9">@Model.Email</dd>
+
+    <dt class="col-sm-3">Tarefas</dt>
+    <dd class="col-sm-9">@Model.Tarefas.Count</dd>
+</dl>
+
+@if (Model.Tarefas.Any())
+{
+    <div class="alert alert-info">
+        Este participante será removido das tarefas em que participa. As tarefas não serão excluídas.
+    </div>
+}
+
+<form asp-action="Delete" class="mt-4">
+    <input type="hidden" asp-for="IdParticipante" />
+    <input type="submit" value="Confirmar Exclusão" class="btn btn-danger" />
+    <a asp-action="Index" class="btn btn-secondary">Cancelar e Voltar</a>
+</form>

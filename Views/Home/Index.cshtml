@@ -1,0 +1,34 @@
+﻿@{
+    ViewData["Title"] = "Início";
+}
+
+<section class="hero">
+    <span class="hero-tag">ASP.NET Core MVC · Entity Framework</span>
+    <h1 class="hero-title">Organize suas tarefas<br />sem complicação.</h1>
+    <p class="hero-lead">
+        Crie, acompanhe e conclua suas atividades em um só lugar.
+        Defina prazos, atualize o status e mantenha o foco no que importa.
+    </p>
+    <div class="hero-actions">
+        <a class="btn btn-dark btn-lg px-4" asp-controller="Tarefas" asp-action="Index">Ver minhas tarefas</a>
+        <a class="btn btn-outline-secondary btn-lg px-4" asp-controller="Tarefas" asp-action="Create">Nova tarefa</a>
+    </div>
+</section>
+
+<section class="features">
+    <div class="feature">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
+        <h2>Crie</h2>
+        <p>Adicione tarefas com título, descrição e data de vencimento.</p>
+    </div>
+    <div class="feature">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>
+        <h2>Acompanhe</h2>
+        <p>Atualize o status de cada tarefa conforme o trabalho avança.</p>
+    </div>
+    <div class="feature">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8" /><path d="M12 8v4l2.5 2.5" /></svg>
+        <h2>Cumpra prazos</h2>
+        <p>Veja o que vence primeiro e não deixe nada passar.</p>
+    </div>
+</section>

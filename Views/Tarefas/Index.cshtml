@@ -1,0 +1,101 @@
+﻿@model IEnumerable<GerenciadorTarefas.Models.Tarefa>
+
+@{
+    ViewData["Title"] = "Lista de Tarefas";
+}
+
+<h1>Lista de Tarefas</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Nova Tarefa</a>
+</p>
+
+<form asp-action="Index" method="get" class="row g-2 align-items-end mb-3">
+    <div class="col-sm-6 col-lg-3">
+        <label class="form-label" for="participante">Participante</label>
+        <select class="form-select" id="participante" name="participante" asp-items="ViewBag.FiltroParticipante">
+            <option value="">Todos</option>
+        </select>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+        <label class="form-label" for="categoria">Categoria</label>
+        <select class="form-select" id="categoria" name="categoria" asp-items="ViewBag.FiltroCategoria">
+            <option value="">Todas</option>
+        </select>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+        <label class="form-label" for="status">Status</label>
+        <select class="form-select" id="status" name="status" asp-items="ViewBag.FiltroStatus">
+            <option value="">Todos</option>
+        </select>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+        <button type="submit" class="btn btn-dark">Filtrar</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">Limpar</a>
+    </div>
+</form>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Titulo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Descricao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DataVencimento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FK_IdCategoria)
+            </th>
+            <th>Participantes</th>
+            <th>
+                @Html.DisplayNameFor(model => model.DataCriacao)
+            </th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Titulo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Descricao)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DataVencimento)
+                </td>
+                <td>
+                    @item.Status.String()
+                </td>
+                <td>
+                    @item.Categoria?.Nome
+                </td>
+                <td>
+                    @(item.Participantes.Any() ? string.Join(", ", item.Participantes.Select(p => p.Nome)) : "—")
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DataCriacao)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.IdTarefa" class="btn btn-sm btn-warning">Editar</a> |
+                    <a asp-action="Details" asp-route-id="@item.IdTarefa" class="btn btn-sm btn-info">Detalhes</a> |
+                    <a asp-action="Delete" asp-route-id="@item.IdTarefa" class="btn btn-sm btn-danger">Excluir</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (!Model.Any())
+{
+    <p class="text-muted">Nenhuma tarefa encontrada.</p>
+}

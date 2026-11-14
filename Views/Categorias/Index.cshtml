@@ -1,0 +1,36 @@
+@model IEnumerable<GerenciadorTarefas.Models.Categoria>
+
+@{
+    ViewData["Title"] = "Categorias";
+}
+
+<h1>Categorias</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Nova Categoria</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Tarefas</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Nome</td>
+                <td>
+                    <a asp-controller="Tarefas" asp-action="Index" asp-route-categoria="@item.IdCategoria">@item.Tarefas.Count</a>
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.IdCategoria" class="btn btn-sm btn-warning">Editar</a> |
+                    <a asp-action="Delete" asp-route-id="@item.IdCategoria" class="btn btn-sm btn-danger">Excluir</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

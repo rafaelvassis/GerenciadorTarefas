@@ -1,0 +1,90 @@
+.hero {
+    max-width: 640px;
+    margin: 4rem auto 3.5rem;
+    text-align: center;
+}
+
+.hero-tag {
+    display: inline-block;
+    padding: .3rem .8rem;
+    margin-bottom: 1.5rem;
+    font-size: .8rem;
+    letter-spacing: .02em;
+    color: #6c757d;
+    border: 1px solid #e5e7eb;
+    border-radius: 999px;
+}
+
+.hero-title {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -.02em;
+    color: #111827;
+    margin-bottom: 1.25rem;
+}
+
+.hero-lead {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #6b7280;
+    margin-bottom: 2rem;
+}
+
+.hero-actions {
+    display: flex;
+    gap: .75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    max-width: 900px;
+    margin: 0 auto 3rem;
+    padding-top: 3rem;
+    border-top: 1px solid #f0f0f0;
+}
+
+.feature {
+    padding: 1.5rem;
+    border: 1px solid #eef0f2;
+    border-radius: .75rem;
+    background: #fff;
+    transition: border-color .2s, transform .2s;
+}
+
+.feature:hover {
+    border-color: #d1d5db;
+    transform: translateY(-2px);
+}
+
+.feature svg {
+    width: 2.25rem;
+    height: 2.25rem;
+    padding: .45rem;
+    margin-bottom: 1rem;
+    border-radius: .5rem;
+    background: #f3f4f6;
+    fill: none;
+    stroke: #111827;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.feature h2 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: .35rem;
+}
+
+.feature p {
+    font-size: .925rem;
+    line-height: 1.5;
+    color: #6b7280;
+    margin: 0;
+}
