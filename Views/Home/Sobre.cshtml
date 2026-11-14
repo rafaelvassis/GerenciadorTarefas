@@ -162,17 +162,18 @@
     <section>
         <h2>Como executar</h2>
         <p class="texto">Pré-requisitos: <b>.NET 10 SDK</b> e <b>SQL Server LocalDB</b> (já vem com o Visual Studio).</p>
-        <pre><code>git clone &lt;url-do-repositório&gt;
+        <pre><code>git clone https://github.com/rafaelvassis/GerenciadorTarefas.git
 cd GerenciadorTarefas
 dotnet run</code></pre>
         <p class="texto">
             Depois, acesse <code>http://localhost:5062</code>. Na primeira execução o banco é criado
-            automaticamente, já com categorias e um usuário de exemplo.
+            automaticamente, já com categorias e participantes de exemplo.
         </p>
     </section>
 
     <div class="sobre-acoes">
         <a class="btn btn-dark px-4" asp-controller="Tarefas" asp-action="Index">Ver as tarefas</a>
+        <a class="btn btn-outline-secondary px-4" href="https://github.com/rafaelvassis/GerenciadorTarefas" target="_blank" rel="noopener">Código no GitHub</a>
     </div>
 
 </article>

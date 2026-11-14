@@ -10,9 +10,13 @@ builder.Services.AddControllersWithViews(options =>
     options.ModelBindingMessageProvider.SetValueMustNotBeNullAccessor(_ => "Este campo é obrigatório.");
 });
 
-// Entity Framework Core com SQL Server, usando a connection string "DefaultConnection"
+// Entity Framework Core com SQL Server, usando a connection string "DefaultConnection".
+// EnableRetryOnFailure tenta de novo em falhas temporárias, como o Azure SQL gratuito
+// "acordando" depois de um tempo sem uso.
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        sql => sql.EnableRetryOnFailure()));
 
 var app = builder.Build();
 

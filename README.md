@@ -4,6 +4,10 @@ Aplicação web para organizar e acompanhar tarefas, desenvolvida como projeto d
 
 Cada tarefa tem título, descrição, data de vencimento, status, categoria e uma lista de participantes (que pode ficar vazia).
 
+**Acesse online:** https://gerenciador-tarefas-rafaelvassis-eabdewc9e3f5cved.brazilsouth-01.azurewebsites.net
+
+> O site e o banco usam os planos gratuitos da Azure e "dormem" quando ficam sem uso. Por isso o primeiro acesso pode levar alguns segundos.
+
 ## Tecnologias
 
 - C#
@@ -12,6 +16,7 @@ Cada tarefa tem título, descrição, data de vencimento, status, categoria e um
 - SQL Server e SQL Server Management Studio (SSMS)
 - Bootstrap
 - Git e GitHub
+- Azure App Service, Azure SQL e GitHub Actions (deploy)
 
 ## Funcionalidades
 
@@ -54,7 +59,7 @@ flowchart LR
 **Passos**
 
 ```bash
-git clone <url-do-repositório>
+git clone https://github.com/rafaelvassis/GerenciadorTarefas.git
 cd GerenciadorTarefas
 dotnet run
 ```
@@ -123,9 +128,18 @@ A pasta [`database/`](database) contém scripts para criar e consultar o mesmo b
 
 Execute os arquivos na ordem numérica. Use os scripts **ou** a aplicação (`dotnet run`) para criar o banco, não os dois no mesmo banco.
 
+## Deploy
+
+A aplicação está publicada no **Azure App Service**, com o banco no **Azure SQL Database**.
+
+- O deploy é automático: a cada `push` na branch `main`, um workflow do **GitHub Actions** (`.github/workflows/`) compila e publica o site.
+- A connection string do banco fica só nas configurações do App Service (`DefaultConnection`), fora do repositório.
+- Na inicialização, a aplicação aplica as migrations no Azure SQL, do mesmo jeito que faz localmente.
+
 ## Estrutura do projeto
 
 ```
+├── .github/       # Workflow do GitHub Actions (deploy na Azure)
 ├── Controllers/   # Recebem as requisições e coordenam as operações
 ├── Data/          # AppDbContext: mapeamento, relacionamentos e dados iniciais
 ├── Migrations/    # Histórico do esquema gerado pelo Entity Framework
